@@ -12,6 +12,19 @@ import { createRequire } from "module";
 const require = createRequire(import.meta.url);
 const pdfParse = require("pdf-parse");
 import qrcode from "qrcode-terminal";
+// --- add these imports near top of index.js ---
+import express from "express";
+
+// --- simple health server to satisfy Render port binding ---
+const app = express();
+app.get("/", (req, res) => res.send("OK - WhatsApp bot running"));
+app.get("/health", (req, res) => res.json({ status: "ok", time: Date.now() }));
+
+// start listening on Render's provided port (or 3000 locally)
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`Express health server listening on port ${PORT}`);
+});
 
 
 
@@ -143,3 +156,4 @@ async function processPDF(sock, msg) {
 
 // START BOT
 startBot();
+
